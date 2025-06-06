@@ -21,6 +21,12 @@ pipeline {
                 sh "npm test"
             }
         }
+        stage('Build') {
+            steps {
+                sh "docker build . --tag ttl.sh/nodejs11:1h"
+                sh "docker push ttl.sh/nodejs11:1h"
+            }
+        }
         stage('Deploy') {
             steps {
                 withCredentials([sshUserPrivateKey(
@@ -31,17 +37,13 @@ pipeline {
 mkdir -p ~/.ssh
 ssh-keyscan target >> ~/.ssh/known_hosts
 
-ssh -i ${ssh_key} ${ssh_user}@target 'mkdir -p /home/laborant/app'
+ssh -i ${ssh_key} ${ssh_user}@target 'docker stop nodejs || true'
 
-scp -i ${ssh_key} package*.json index.js index.test.js ${ssh_user}@target:/home/laborant/app/
+ssh -i ${ssh_key} ${ssh_user}@target 'docker rm nodejs || true'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app'
+ssh -i ${ssh_key} ${ssh_user}@target 'docker pull ttl.sh/nodejs11:1h'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'sudo systemctl stop node-app.service || true'
-
-ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app && npm install'
-
-ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app && (npm start&)'
+ssh -i ${ssh_key} ${ssh_user}@target 'docker run -d -p 4444:4444 --name nodejs ttl.sh/nodejs11:1h '
 """
                 }
             }
