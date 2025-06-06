@@ -39,9 +39,9 @@ ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app'
 
 ssh -i ${ssh_key} ${ssh_user}@target 'sudo systemctl stop node-app.service || true'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'npm install'
+ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app && npm install'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'npm start'
+ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app && npm start'
 """
                 }
             }
