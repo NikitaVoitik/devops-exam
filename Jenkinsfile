@@ -31,7 +31,7 @@ pipeline {
             steps {
                 withKubeConfig([credentialsId: 'laborant', serverUrl: 'https://k8s:6443']) {
                       sh '/usr/local/bin/kubectl apply -f pod.yaml'
-                      sh '/usr/local/bin/kubectl wait --for=condition=ready pod -l app=nodejs11'
+                      sh '/usr/local/bin/kubectl wait --for=condition=Ready pod/nodejs11 --timeout=60s'
                       sh '/usr/local/bin/kubectl apply -f service.yaml'
                 }
 
