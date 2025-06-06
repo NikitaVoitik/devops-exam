@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                withKubeConfig([credentialsId: 'user1', serverUrl: 'https://k8s:6443']) {
+                withKubeConfig([credentialsId: 'laborant', serverUrl: 'https://k8s:6443']) {
                       sh 'ls'
                       sh 'pwd'
                       sh '/usr/local/bin/kubectl apply -f pod.yaml'
