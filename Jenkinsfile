@@ -37,9 +37,9 @@ scp -i ${ssh_key} package*.json index.js index.test.js ${ssh_user}@target:/home/
 
 ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'npm install'
-
 ssh -i ${ssh_key} ${ssh_user}@target 'sudo systemctl stop node-app.service || true'
+
+ssh -i ${ssh_key} ${ssh_user}@target 'npm install'
 
 ssh -i ${ssh_key} ${ssh_user}@target 'npm start'
 """
