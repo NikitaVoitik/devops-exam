@@ -31,11 +31,11 @@ pipeline {
 mkdir -p ~/.ssh
 ssh-keyscan target >> ~/.ssh/known_hosts
 
-ssh -i ${ssh_key} ${ssh_user}@target 'sudo mkdir -p /opt/app'
+ssh -i ${ssh_key} ${ssh_user}@target 'sudo mkdir -p /home/laborant/app'
 
-scp -i ${ssh_key} package*.json index.js ${ssh_user}@target:/opt/app/
+scp -i ${ssh_key} package*.json index.js ${ssh_user}@target:/home/laborant/app/
 
-ssh -i ${ssh_key} ${ssh_user}@target 'cd /opt/app'
+ssh -i ${ssh_key} ${ssh_user}@target 'cd /home/laborant/app'
 
 ssh -i ${ssh_key} ${ssh_user}@target 'npm install'
 
