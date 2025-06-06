@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 withKubeConfig([credentialsId: 'user1', serverUrl: 'https://k8s']) {
-                      sh '/usr/local/bin/kubectl apply -f .'
+                      sh 'kubectl apply -f pod.yaml'
                 }
 
             }
