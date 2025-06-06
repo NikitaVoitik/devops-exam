@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 withKubeConfig([credentialsId: 'laborant', serverUrl: 'https://k8s:6443']) {
-                      sh 'ls'
+                      sh 'which kubectl'
                       sh 'pwd'
                       sh '/usr/local/bin/kubectl apply -f pod.yaml'
                 }

@@ -8,4 +8,4 @@ spec:
   ports:
     - port: 4444
       targetPort: 4444
-  type: ClusterIP
+  type: LoadBalancer
