@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs "Node 22"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh "npm test"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                withCredentials([sshUserPrivateKey(
+                    credentialsId: '485e9257-7c6e-411e-9487-267a87234a20',
+                    keyFileVariable: 'ssh_key',
+                    usernameVariable: 'ssh_user')]) {
+                        sh """
+chmod +x main
+
+mkdir -p ~/.ssh
+ssh-keyscan target >> ~/.ssh/known_hosts
+
+ssh -i ${ssh_key} ${ssh_user}@target 'mkdir -p /opt/app'
+
+scp -i ${ssh_key} package*.json index.js ${ssh_user}@target:/opt/app/
+
+ssh -i ${ssh_key} ${ssh_user}@target 'cd /opt/app'
+
+ssh -i ${ssh_key} ${ssh_user}@target 'npm install'
+
+ssh -i ${ssh_key} ${ssh_user}@target 'sudo systemctl stop node-app.service || true'
+
+ssh -i ${ssh_key} ${ssh_user}@target 'npm start'
+"""
+                }
+            }
+        }
+    }
+}
