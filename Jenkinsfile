@@ -35,15 +35,15 @@ pipeline {
                     usernameVariable: 'ssh_user')]) {
                         sh """
 mkdir -p ~/.ssh
-ssh-keyscan target >> ~/.ssh/known_hosts
+ssh-keyscan docker >> ~/.ssh/known_hosts
 
-ssh -i ${ssh_key} ${ssh_user}@target 'docker stop nodejs || true'
+ssh -i ${ssh_key} ${ssh_user}@docker 'docker stop nodejs || true'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'docker rm nodejs || true'
+ssh -i ${ssh_key} ${ssh_user}@docker 'docker rm nodejs || true'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'docker pull ttl.sh/nodejs11:1h'
+ssh -i ${ssh_key} ${ssh_user}@docker 'docker pull ttl.sh/nodejs11:1h'
 
-ssh -i ${ssh_key} ${ssh_user}@target 'docker run -d -p 4444:4444 --name nodejs ttl.sh/nodejs11:1h '
+ssh -i ${ssh_key} ${ssh_user}@docker 'docker run -d -p 4444:4444 --name nodejs ttl.sh/nodejs11:1h '
 """
                 }
             }
